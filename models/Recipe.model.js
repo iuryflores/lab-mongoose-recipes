@@ -1,19 +1,20 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema as _Schema, model } from 'mongoose';
+const Schema = _Schema;
 
 const recipeSchema = new Schema({
-  title: String,
-  level: String,
-  ingredients: Array,
-  cuisine: String,
-  dishType: String,
-  image: String,
-  duration: Number,
+  title: { type: String, unique },
+  level: { type: String, enum: ['Easy Peasy', 'Amateur Chef', 'UltraPro Chef'] },
+  ingredients: [String],
+  cuisine: { type: String, require },
+  dishType: {
+    type: String, enum: ['breakfast', 'main_course', 'soup', 'snack', 'drink', 'dessert', 'other']
+  },
+  image: { type: String, default: 'https://images.media-allrecipes.com/images/75131.jpg' },
+  duration: { type: Number, min: 0 },
   creator: String,
-  created: Date
-
+  created: { type: Date, default: 'Today' }
 });
 
-const Recipe = mongoose.model('Recipe', recipeSchema);
+const Recipe = model('Recipe', recipeSchema);
 
-module.exports = Recipe;
+export default Recipe;
